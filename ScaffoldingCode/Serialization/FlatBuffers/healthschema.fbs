@@ -25,7 +25,7 @@ namespace CustomAppProto;
 // use the form <variable name: data type>. Note, this can be nested, and
 // there could be multiple such data structures defined.
 
-table Message
+table Health
 {
    seq_no: uint32;   // this is like the seq num in a TCP segment
    ts: double;       // say this is the timestamp
@@ -37,4 +37,4 @@ table Message
 // The reason we need this is because we may have a very complicated nested
 // data structure and so we need to tell the compiler the starting point.
 
-root_type Message;
+root_type Health;

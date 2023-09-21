@@ -1,0 +1,15 @@
+namespace CustomAppProto;
+
+table Response
+{
+   seq_no: uint32;   // this is like the seq num in a TCP segment
+   ts: double;       // say this is the timestamp
+   name: string;      // say this is some descriptive string
+   data: [uint32];    // say this is some blob of binary data
+}
+
+// indicate what is the top level structure from where the serialization starts.
+// The reason we need this is because we may have a very complicated nested
+// data structure and so we need to tell the compiler the starting point.
+
+root_type Response;
