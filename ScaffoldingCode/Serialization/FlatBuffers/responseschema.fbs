@@ -6,6 +6,22 @@ table Response
    ts: double;       // say this is the timestamp
    name: string;      // say this is some descriptive string
    data: [uint32];    // say this is some blob of binary data
+
+   code: [request_status];
+   contents: [contents_status]; 
+}
+
+enum request_status: string
+{
+   OK,
+   BAD_REQUEST
+}
+
+enum contents_status: string
+{
+   Order placed,
+   You are healthy,
+   Bad request
 }
 
 // indicate what is the top level structure from where the serialization starts.
