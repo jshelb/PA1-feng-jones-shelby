@@ -31,6 +31,28 @@ table Health
    ts: double;       // say this is the timestamp
    name: string;      // say this is some descriptive string
    data: [uint32];    // say this is some blob of binary data
+
+   dispenser: [dispenser_options];
+   icemaker: int32;
+   lightbulb: [good_or_bad];
+   fridge_temp: int32;
+   freezer_temp: int32;
+   sensor_status: [good_or_bad];
+   humidity: double
+   door_openings: uint32;
+}
+
+enum dispenser_options: string
+{
+   OPTIMAL,
+   PARTIAL,
+   BLOCKAGE
+}
+
+enum good_or_bad: string
+{
+   GOOD,
+   BAD
 }
 
 // indicate what is the top level structure from where the serialization starts.
