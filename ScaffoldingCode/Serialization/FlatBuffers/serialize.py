@@ -17,7 +17,7 @@ import sys
 # flatbuffers.  If the python package is installed in your system wide files
 # or virtualenv, then this may not be needed
 '''CHANGE PATH FOR URS'''
-sys.path.append(os.path.join (os.path.dirname(__file__), '/home/jshelby/Apps/flatbuffers/python'))
+sys.path.append(os.path.join (os.path.dirname(__file__), '/home/trevor/apps/flatbuffers/python'))
 import flatbuffers    # this is the flatbuffers package we import
 import time   # we need this get current time
 import numpy as np  # to use in our vector field
@@ -25,6 +25,9 @@ import numpy as np  # to use in our vector field
 import zmq   # we need this for additional constraints provided by the zmq serialization
 
 from custom_msg import CustomMessage  # our custom message in native format
+from order_msg import OrderMessage
+from health_msg import HealthMessage
+from response_msg import ResponseMessage
 from CustomAppProto import Health
 from CustomAppProto import Order, VeggieOrder, CansAndBottles, Milk, Bread, Meat
 from CustomAppProto import Response
