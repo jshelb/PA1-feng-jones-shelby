@@ -11,17 +11,17 @@ table Response
    contents: ContentsStatus; 
 }
 
-enum RequestStatus: string
+enum RequestStatus: byte
 {
    OK,
    BAD_REQUEST
 }
 
-enum ContentsStatus: string
+enum ContentsStatus: byte
 {
-   Order placed,
-   You are healthy,
-   Bad request
+   ORDER_PLACED,
+   YOU_ARE_HEALTHY,
+   BAD_REQUEST
 }
 
 root_type Response;

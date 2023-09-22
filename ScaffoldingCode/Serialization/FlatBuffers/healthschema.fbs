@@ -24,14 +24,14 @@ table Health
    door_openings: uint32;
 }
 
-enum dispenser_options: string
+enum dispenser_options: byte
 {
    OPTIMAL,
    PARTIAL,
    BLOCKAGE
 }
 
-enum good_or_bad: string
+enum good_or_bad: byte
 {
    GOOD,
    BAD
