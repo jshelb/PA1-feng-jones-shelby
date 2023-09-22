@@ -1,9 +1,3 @@
-// Author: Aniruddha Gokhale, Vanderbilt University
-// Created: Sept 2021 for Distributed Systems course
-// Modified: Fall 2022 for Computer Networking course
-//
-// IDL schema for the data type we will be transferring
-
 // For our assignment, we will be defining some application-level
 // message formats, just like HTTP has GET, PUT, POST etc. 
 //
@@ -13,18 +7,6 @@
 
 namespace CustomAppProto;
 
-// define the user-defined type that we want to serialize
-// This can be arbitrarily complex. Here we show a sample
-// which is not overly complex but still showcases the features
-//
-// In your case this structure will be whatever is the data structure
-// that holds the information that the producer will send to consumer
-
-// The data structure is defined using the keyword table as shown. The
-// variable name  is my choice.  Individual fields of the data structure
-// use the form <variable name: data type>. Note, this can be nested, and
-// there could be multiple such data structures defined.
-
 table Health
 {
    seq_no: uint32;   // this is like the seq num in a TCP segment
@@ -32,13 +14,13 @@ table Health
    name: string;      // say this is some descriptive string
    data: [uint32];    // say this is some blob of binary data
 
-   dispenser: [dispenser_options];
+   dispenser: dispenser_options;
    icemaker: int32;
-   lightbulb: [good_or_bad];
+   lightbulb: good_or_bad;
    fridge_temp: int32;
    freezer_temp: int32;
-   sensor_status: [good_or_bad];
-   humidity: double
+   sensor_status: good_or_bad;
+   humidity: double;
    door_openings: uint32;
 }
 

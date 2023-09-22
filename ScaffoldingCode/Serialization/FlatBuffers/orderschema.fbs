@@ -1,15 +1,87 @@
 namespace CustomAppProto;
 
-table Order
-{
+
+table VeggieOrder {
+   tomato: double;
+   cucumber: double;
+   eggplant: double;
+   broccoli: double;
+   carrot: double;
+   onion: double;
+}
+
+table CanOrder {
+   coke: uint32;
+   pepsi: uint32;
+   coors: uint32;
+}
+
+
+table BottleOrder {
+   sprite: uint32;
+   rootbeer: uint32;
+   fanta: uint32;
+}
+
+
+table CansAndBottles {
+    cans: CanOrder;
+    bottles: BottleOrder;
+}
+
+enum MilkType: byte {
+    OnePercent,
+    TwoPercent,
+    FatFree,
+    Whole,
+    Almond,
+    Cashew,
+    Oat,
+}
+
+table Milk {
+    type: MilkType;
+    quantity: double;
+}
+
+enum BreadType: byte {
+    WholeWheat,
+    Pumpernickel,
+    Rye,
+    White,
+    Sourdough,
+}
+
+table Bread {
+    type: BreadType;
+    quantity: int;
+}
+
+enum MeatType: byte {
+    GroundBeef,
+    Chicken,
+    Turkey,
+    Ham,
+    Pork,
+    Steak,
+}
+
+table Meat {
+    type: MeatType;
+    quantity: double;
+}
+
+table Order {
    seq_no: uint32;   // this is like the seq num in a TCP segment
    ts: double;       // say this is the timestamp
    name: string;      // say this is some descriptive string
    data: [uint32];    // say this is some blob of binary data
+   
+   veggies: VeggieOrder;
+   drinks: CansAndBottles;
+   milk: [Milk];
+   bread: [Bread];
+   meat: [Meat];
 }
-
-// indicate what is the top level structure from where the serialization starts.
-// The reason we need this is because we may have a very complicated nested
-// data structure and so we need to tell the compiler the starting point.
 
 root_type Order;
