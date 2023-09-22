@@ -16,7 +16,8 @@ import sys
 # make sure to change this path to where you have compiled and installed
 # flatbuffers.  If the python package is installed in your system wide files
 # or virtualenv, then this may not be needed
-sys.path.append(os.path.join (os.path.dirname(__file__), '/home/gokhale/Apps/flatbuffers/python'))
+'''CHANGE PATH FOR URS'''
+sys.path.append(os.path.join (os.path.dirname(__file__), '/home/jshelby/Apps/flatbuffers/python'))
 import flatbuffers    # this is the flatbuffers package we import
 import time   # we need this get current time
 import numpy as np  # to use in our vector field
@@ -24,13 +25,23 @@ import numpy as np  # to use in our vector field
 import zmq   # we need this for additional constraints provided by the zmq serialization
 
 from custom_msg import CustomMessage  # our custom message in native format
-import CustomAppProto.Message as msg   # this is the generated code by the flatc compiler
+import CustomAppProto.Health as health   # this is the generated code by the flatc compiler
+import CustomAppProto.Order as order
+import CustomAppProto.Response as resp
 
 # This is the method we will invoke from our driver program
 # Note that if you have have multiple different message types, we could have
 # separate such serialize/deserialize methods, or a single method can check what
 # type of message it is and accordingly take actions.
 def serialize (cm):
+    ''' 
+    TODO : 1. follow the format used to serialize the example msg and implement 
+              for order, health, and response (shouldn't be hard)
+           2. create a python representation of the schemas (see custom_msg.py -
+               easy)
+          - if u make changes to the fbs files, follow instructions in readme 
+            to regenerate the py representation in the CustomAppProto dir
+    '''
     # first obtain the builder object that is used to create an in-memory representation
     # of the serialized object from the custom message
     builder = flatbuffers.Builder (0);

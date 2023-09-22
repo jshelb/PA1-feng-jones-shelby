@@ -6,46 +6,46 @@ import flatbuffers
 from flatbuffers.compat import import_numpy
 np = import_numpy()
 
-class Message(object):
+class Response(object):
     __slots__ = ['_tab']
 
     @classmethod
     def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
-        x = Message()
+        x = Response()
         x.Init(buf, n + offset)
         return x
 
     @classmethod
-    def GetRootAsMessage(cls, buf, offset=0):
+    def GetRootAsResponse(cls, buf, offset=0):
         """This method is deprecated. Please switch to GetRootAs."""
         return cls.GetRootAs(buf, offset)
-    # Message
+    # Response
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-    # Message
+    # Response
     def SeqNo(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-    # Message
+    # Response
     def Ts(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Float64Flags, o + self._tab.Pos)
         return 0.0
 
-    # Message
+    # Response
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
-    # Message
+    # Response
     def Data(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
@@ -53,43 +53,89 @@ class Message(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 4))
         return 0
 
-    # Message
+    # Response
     def DataAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint32Flags, o)
         return 0
 
-    # Message
+    # Response
     def DataLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
-    # Message
+    # Response
     def DataIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         return o == 0
 
-def MessageStart(builder): builder.StartObject(4)
+    # Response
+    def Code(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
+        return 0
+
+    # Response
+    def Contents(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
+        return 0
+
+def ResponseStart(builder):
+    builder.StartObject(6)
+
 def Start(builder):
-    return MessageStart(builder)
-def MessageAddSeqNo(builder, seqNo): builder.PrependUint32Slot(0, seqNo, 0)
+    ResponseStart(builder)
+
+def ResponseAddSeqNo(builder, seqNo):
+    builder.PrependUint32Slot(0, seqNo, 0)
+
 def AddSeqNo(builder, seqNo):
-    return MessageAddSeqNo(builder, seqNo)
-def MessageAddTs(builder, ts): builder.PrependFloat64Slot(1, ts, 0.0)
+    ResponseAddSeqNo(builder, seqNo)
+
+def ResponseAddTs(builder, ts):
+    builder.PrependFloat64Slot(1, ts, 0.0)
+
 def AddTs(builder, ts):
-    return MessageAddTs(builder, ts)
-def MessageAddName(builder, name): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
+    ResponseAddTs(builder, ts)
+
+def ResponseAddName(builder, name):
+    builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
+
 def AddName(builder, name):
-    return MessageAddName(builder, name)
-def MessageAddData(builder, data): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(data), 0)
+    ResponseAddName(builder, name)
+
+def ResponseAddData(builder, data):
+    builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(data), 0)
+
 def AddData(builder, data):
-    return MessageAddData(builder, data)
-def MessageStartDataVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StartDataVector(builder, numElems):
-    return MessageStartDataVector(builder, numElems)
-def MessageEnd(builder): return builder.EndObject()
+    ResponseAddData(builder, data)
+
+def ResponseStartDataVector(builder, numElems):
+    return builder.StartVector(4, numElems, 4)
+
+def StartDataVector(builder, numElems: int) -> int:
+    return ResponseStartDataVector(builder, numElems)
+
+def ResponseAddCode(builder, code):
+    builder.PrependInt8Slot(4, code, 0)
+
+def AddCode(builder, code):
+    ResponseAddCode(builder, code)
+
+def ResponseAddContents(builder, contents):
+    builder.PrependInt8Slot(5, contents, 0)
+
+def AddContents(builder, contents):
+    ResponseAddContents(builder, contents)
+
+def ResponseEnd(builder):
+    return builder.EndObject()
+
 def End(builder):
-    return MessageEnd(builder)
+    return ResponseEnd(builder)

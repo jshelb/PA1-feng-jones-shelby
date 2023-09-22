@@ -7,6 +7,25 @@
 
 namespace CustomAppProto;
 
+enum DispenserOptions: byte
+{
+   OPTIMAL,
+   PARTIAL,
+   BLOCKAGE
+}
+
+enum LightStatus: byte
+{
+   GOOD,
+   BAD
+}
+
+enum SensorStatus: byte
+{
+   GOOD,
+   BAD
+}
+
 table Health
 {
    seq_no: uint32;   // this is like the seq num in a TCP segment
@@ -14,27 +33,14 @@ table Health
    name: string;      // say this is some descriptive string
    data: [uint32];    // say this is some blob of binary data
 
-   dispenser: dispenser_options;
+   dispenser: DispenserOptions;
    icemaker: int32;
-   lightbulb: good_or_bad;
+   lightbulb: LightStatus;
    fridge_temp: int32;
    freezer_temp: int32;
-   sensor_status: good_or_bad;
+   sensor_status: SensorStatus;
    humidity: double;
    door_openings: uint32;
-}
-
-enum dispenser_options: byte
-{
-   OPTIMAL,
-   PARTIAL,
-   BLOCKAGE
-}
-
-enum good_or_bad: byte
-{
-   GOOD,
-   BAD
 }
 
 // indicate what is the top level structure from where the serialization starts.

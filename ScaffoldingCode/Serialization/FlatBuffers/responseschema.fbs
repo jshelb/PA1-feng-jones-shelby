@@ -1,15 +1,5 @@
 namespace CustomAppProto;
 
-table Response
-{
-   seq_no: uint32;   // this is like the seq num in a TCP segment
-   ts: double;       // say this is the timestamp
-   name: string;      // say this is some descriptive string
-   data: [uint32];    // say this is some blob of binary data
-
-   code: RequestStatus;
-   contents: ContentsStatus; 
-}
 
 enum RequestStatus: byte
 {
@@ -22,6 +12,17 @@ enum ContentsStatus: byte
    ORDER_PLACED,
    YOU_ARE_HEALTHY,
    BAD_REQUEST
+}
+
+table Response
+{
+   seq_no: uint32;   // this is like the seq num in a TCP segment
+   ts: double;       // say this is the timestamp
+   name: string;      // say this is some descriptive string
+   data: [uint32];    // say this is some blob of binary data
+
+   code: RequestStatus;
+   contents: ContentsStatus; 
 }
 
 root_type Response;
