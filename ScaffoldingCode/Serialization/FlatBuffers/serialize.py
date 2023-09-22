@@ -25,9 +25,13 @@ import numpy as np  # to use in our vector field
 import zmq   # we need this for additional constraints provided by the zmq serialization
 
 from custom_msg import CustomMessage  # our custom message in native format
+from CustomAppProto import Health
+from CustomAppProto import Order, VeggieOrder, CansAndBottles, Milk, Bread, Meat
+from CustomAppProto import Response
+
 import CustomAppProto.Health as health   # this is the generated code by the flatc compiler
 import CustomAppProto.Order as order
-import CustomAppProto.Response as resp
+import CustomAppProto.Response as response
 
 # This is the method we will invoke from our driver program
 # Note that if you have have multiple different message types, we could have
@@ -65,6 +69,117 @@ def serialize (cm):
     msg.AddName (builder, name_field)  # serialize the name
     msg.AddData (builder, data)  # serialize the dummy data
     serialized_msg = msg.End (builder)  # get the topic of all these fields
+
+
+    # Serialize the data array
+    Health.HealthStartDataVector(builder, len(cm.data))
+    for i in reversed(range(len(cm.data))):
+        builder.PrependUint32(cm.data[i])
+    data = builder.EndVector()
+
+    # Serialize the Health message
+    Health.HealthStart(builder)
+    Health.HealthAddSeqNo(builder, cm.seq_no)
+    Health.HealthAddTs(builder, cm.ts)
+    Health.HealthAddName(builder, name_field)
+    Health.HealthAddData(builder, data)
+    Health.HealthAddDispenser(builder, cm.dispenser)
+    Health.HealthAddIcemaker(builder, cm.icemaker)
+    Health.HealthAddLightbulb(builder, cm.lightbulb)
+    Health.HealthAddFridgeTemp(builder, cm.fridge_temp)
+    Health.HealthAddFreezerTemp(builder, cm.freezer_temp)
+    Health.HealthAddSensorStatus(builder, cm.sensor_status)
+    Health.HealthAddHumidity(builder, cm.humidity)
+    Health.HealthAddDoorOpenings(builder, cm.door_openings)
+    serialized_msg = Health.HealthEnd(builder)
+
+
+    # Serialize the data array
+    Order.OrderStartDataVector(builder, len(order.data))
+    for i in reversed(range(len(order.data))):
+        builder.PrependUint32(order.data[i])
+    data = builder.EndVector()
+
+    # Serialize the VeggieOrder table
+    veggies = VeggieOrder.VeggieOrderCreate(
+        builder,
+        order.veggies.tomato,
+        order.veggies.cucumber,
+        order.veggies.eggplant,
+        order.veggies.broccoli,
+        order.veggies.carrot,
+        order.veggies.onion
+    )
+
+    # Serialize the CansAndBottles table
+    cans_and_bottles = CansAndBottles.CansAndBottlesCreate(
+        builder,
+        order.drinks.cans.coke,
+        order.drinks.cans.pepsi,
+        order.drinks.cans.coors,
+        order.drinks.bottles.sprite,
+        order.drinks.bottles.rootbeer,
+        order.drinks.bottles.fanta
+    )
+
+    # Serialize the Milk vector
+    milk_vector = []
+    for milk_item in order.milk:
+        milk_vector.append(Milk.MilkCreate(builder, milk_item.type, milk_item.quantity))
+    Order.OrderStartMilkVector(builder, len(milk_vector))
+    for milk_item in reversed(milk_vector):
+        builder.PrependUOffsetTRelative(milk_item)
+    milk = builder.EndVector(len(milk_vector))
+
+    # Serialize the Bread vector
+    bread_vector = []
+    for bread_item in order.bread:
+        bread_vector.append(Bread.BreadCreate(builder, bread_item.type, bread_item.quantity))
+    Order.OrderStartBreadVector(builder, len(bread_vector))
+    for bread_item in reversed(bread_vector):
+        builder.PrependUOffsetTRelative(bread_item)
+    bread = builder.EndVector(len(bread_vector))
+
+    # Serialize the Meat vector
+    meat_vector = []
+    for meat_item in order.meat:
+        meat_vector.append(Meat.MeatCreate(builder, meat_item.type, meat_item.quantity))
+    Order.OrderStartMeatVector(builder, len(meat_vector))
+    for meat_item in reversed(meat_vector):
+        builder.PrependUOffsetTRelative(meat_item)
+    meat = builder.EndVector(len(meat_vector))
+
+    # Serialize the Order message
+    Order.OrderStart(builder)
+    Order.OrderAddSeqNo(builder, order.seq_no)
+    Order.OrderAddTs(builder, order.ts)
+    Order.OrderAddName(builder, name_field)
+    Order.OrderAddData(builder, data)
+    Order.OrderAddVeggies(builder, veggies)
+    Order.OrderAddDrinks(builder, cans_and_bottles)
+    Order.OrderAddMilk(builder, milk)
+    Order.OrderAddBread(builder, bread)
+    Order.OrderAddMeat(builder, meat)
+    serialized_msg = Order.OrderEnd(builder)
+
+
+    # Serialize the data array
+    Response.ResponseStartDataVector(builder, len(response.data))
+    for i in reversed(range(len(response.data))):
+        builder.PrependUint32(response.data[i])
+    data = builder.EndVector()
+
+    # Serialize the Response message
+    Response.ResponseStart(builder)
+    Response.ResponseAddSeqNo(builder, response.seq_no)
+    Response.ResponseAddTs(builder, response.ts)
+    Response.ResponseAddName(builder, name_field)
+    Response.ResponseAddData(builder, data)
+    Response.ResponseAddCode(builder, response.code)
+    Response.ResponseAddContents(builder, response.contents)
+    serialized_msg = Response.ResponseEnd(builder)
+
+
 
     # end the serialization process
     builder.Finish (serialized_msg)
